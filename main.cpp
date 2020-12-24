@@ -102,36 +102,54 @@ string decoding (const string& AddressInput) {
     }
     return text;
 }
-int main (){
+int main (int argc, char* argv[]){
+    if (argc != 6){ //если делать для работы с командной строкой, то надо 6 поменять на 5, а так же все соотвествующие
+                    //индексы в argv[] надо уменьшить на 1
+        cout << "You need 4 parameters: encoding mode, name of input file, name of output file, key" << endl;
+        return 0;
+    }
     string AddressInput, AddressOutput;
     int operation;
     cout << "Select the program mode" << endl;
     cout << "1. encoding" << endl << "2. decoding" << endl;
-    cin >> operation;
+    operation = std::stoi(argv[2]);
+    //cin >> operation;
     if (operation == 1) {
         string text, str;
         cout << "Specify the full path to the file input.txt" << endl;
-        cin >> AddressInput;
+        //cin >> AddressInput;
         cout << "Specify the full path to the file output.txt" << endl;
-        cin >> AddressOutput;
+        //cin >> AddressOutput;
+        AddressInput = argv[3];
+        AddressOutput = argv[4];
         ifstream input(AddressInput);
         while (std::getline(input, str)) {
             text += str + '\n';
         }
-        std::srand(std::time(nullptr));
-        int key = std::rand();
+        //cout << "Do you want to create a unique key or use an existing one?" << endl;
+        //cout << "If you have a key, enter it, otherwise enter 0" << endl;
+        int key;
+        //cin >> key;
+        key = std::stoi(argv[5]);
+        if (key == 0) {
+            std::srand(std::time(nullptr));
+            key = std::rand();
+            cout << "Remember this key: " << key;
+        }
         std::srand(key);
-        cout << "Remember this key: " << key;
         encoding(text, AddressOutput);
     } else {
         string text;
         cout << "Specify the full path to the file input.txt" << endl;
-        cin >> AddressInput;
+        //cin >> AddressInput;
         cout << "Specify the full path to the file output.txt" << endl;
-        cin >> AddressOutput;
+        //cin >> AddressOutput;
+        AddressInput = argv[3];
+        AddressOutput = argv[4];
         cout << "Enter the key" << endl;
         int key;
-        cin >> key;
+        //cin >> key;
+        key = std::stoi(argv[5]);
         std::srand(key);
         text = decoding(AddressInput);
         ofstream output (AddressOutput);
